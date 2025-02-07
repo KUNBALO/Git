@@ -1,0 +1,9 @@
+(Table as table) =>
+let
+    RemovedBlankRows1 = Table.SelectRows(Table, each not List.IsEmpty(List.RemoveMatchingItems(Record.FieldValues(_), {"", null}))),
+    TransposedTable1 = Table.Transpose(RemovedBlankRows1),
+    RemovedBlankRows2 = Table.SelectRows(TransposedTable1, each not List.IsEmpty(List.RemoveMatchingItems(Record.FieldValues(_), {"", null}))),
+    TransposedTable2 = Table.Transpose(RemovedBlankRows2),
+    PromoteHeaders = Table.PromoteHeaders(TransposedTable2, [PromoteAllScalars=true])
+in
+    PromoteHeaders
